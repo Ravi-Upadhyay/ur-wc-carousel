@@ -1,14 +1,6 @@
 import { html, LitElement, css } from 'lit';
-// import { LionButton } from '@lion/ui/button.js';
-import { ScopedElementsMixin } from '@open-wc/scoped-elements/lit-element.js';
 
-export class UrWcCarousel extends ScopedElementsMixin(LitElement) {
-  // static get scopedElements() {
-  //   return {
-  //     'lion-button': LionButton,
-  //   };
-  // }
-
+export class UrWcCarousel extends LitElement {
   /**
    * @property slides public property expecting array.
    * @property autoRotation public property to initialize default autoRotation. Default false
@@ -42,12 +34,10 @@ export class UrWcCarousel extends ScopedElementsMixin(LitElement) {
 
         .carousel .carousel-item {
           display: none;
-          // Standard was max-height: 400px;
           height: auto;
           max-width: 900px;
           position: relative;
           overflow: hidden;
-          width: 100%;
         }
 
         .carousel .carousel-item.active {
@@ -73,6 +63,9 @@ export class UrWcCarousel extends ScopedElementsMixin(LitElement) {
 
   firstUpdated(_changedProperties) {
     super.firstUpdated(_changedProperties);
+    this.__addEventListenerNext();
+    this.__addEventListenerPrevious();
+    this.__addEventListenerRotation();
     this.__handleSlideChange();
   }
 
@@ -87,20 +80,50 @@ export class UrWcCarousel extends ScopedElementsMixin(LitElement) {
   __initializeSlides() {
     this.__slides = [
       {
-        url: '/_merged_assets/carousel/cats_crossing_road.jpeg',
+        url: './demo/resources/slide-1.jpeg',
         alt: 'Cats Crossing Road',
       },
       {
-        url: '/_merged_assets/carousel/cats_in_fish_market.jpeg',
+        url: './demo/resources/slide-2.jpeg',
         alt: 'Cats In Fish Market',
       },
       {
-        url: '/_merged_assets/carousel/cats_on_caribbean.jpeg',
+        url: './demo/resources/slide-3.jpeg',
         alt: 'Cats On Caribbean',
       },
     ];
     this.__totalSlides = this.__slides.length;
     this.__currentSlideIndex = 0;
+  }
+
+  __addEventListenerNext() {
+    const nextButtonNode = this.shadowRoot?.querySelector(
+      '.carousel .controls button.next'
+    );
+    if (nextButtonNode)
+      nextButtonNode.addEventListener('click', () =>
+        this.__handleNextButtonClick()
+      );
+  }
+
+  __addEventListenerPrevious() {
+    const previousButtonNode = this.shadowRoot?.querySelector(
+      '.carousel .controls button.previous'
+    );
+    if (previousButtonNode)
+      previousButtonNode.addEventListener('click', () =>
+        this.__handlePreviousButtonClick()
+      );
+  }
+
+  __addEventListenerRotation() {
+    const rotationButtonNode = this.shadowRoot?.querySelector(
+      '.carousel .controls button.rotation'
+    );
+    if (rotationButtonNode)
+      rotationButtonNode.addEventListener('click', () =>
+        this.__handleRotationButtonClick()
+      );
   }
 
   __nextCurrentSlideIndex() {
@@ -183,27 +206,13 @@ export class UrWcCarousel extends ScopedElementsMixin(LitElement) {
             )}
           </div>
           <div class="controls">
-            <button
-              class="previous"
-              aria-label="Previous Slide"
-              onclick="${this.__handlePreviousButtonClick}"
-            >
+            <button class="previous" aria-label="Previous Slide">
               Previous
             </button>
-            <button
-              class="rotation pause"
-              aria-label="Toggle Slide Rotation"
-              onclick="${this.__handleRotationButtonClick}"
-            >
+            <button class="rotation pause" aria-label="Toggle Slide Rotation">
               ${this.autoRotation ? 'Pause' : 'Play'}
             </button>
-            <button
-              class="next"
-              aria-label="Next Slide"
-              onclick="${this.__handleNextButtonClick}"
-            >
-              Next
-            </button>
+            <button class="next" aria-label="Next Slide">Next</button>
           </div>
         </div>
       </div>
