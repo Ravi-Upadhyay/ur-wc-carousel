@@ -3,7 +3,7 @@
   "description": "Webcomponent ur-wc-carousel following open-wc recommendations",
   "license": "MIT",
   "author": "ur-wc-carousel",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "main": "index.js",
   "module": "index.js",

@@ -1,0 +1,16 @@
+{
+    "sampleSlides" : [
+        {
+          "url": "./demo/resources/slide-1.jpeg",
+          "alt": "Cats Crossing Road"
+        },
+        {
+          "url": "./demo/resources/slide-2.jpeg",
+          "alt": "Cats In Fish Market"
+        },
+        {
+          "url": "./demo/resources/slide-3.jpeg",
+          "alt": "Cats On Caribbean"
+        }
+      ]
+}
