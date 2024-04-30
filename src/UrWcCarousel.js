@@ -18,10 +18,12 @@ export class UrWcCarousel extends LitElement {
   static get styles() {
     return [
       css`
+        /* Host Styling - Can be changed from outside */
         :host {
           display: flex;
         }
 
+        /* Carousel */
         .carousel {
           background-color: #eee;
           max-width: 900px;
@@ -46,6 +48,37 @@ export class UrWcCarousel extends LitElement {
 
         .carousel .carousel-item.active {
           display: block;
+        }
+
+        .controls {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          gap: 0.5em;
+          position: absolute;
+          top: 1em;
+        }
+
+        .controls button {
+          border: 1px;
+          background-color: rgba(0,0,0,0.5);
+          fill: rgba(255,255,255,0.8);
+          width: 44px;
+          height: 44px;
+        }
+
+        button.rotation {
+          order: 1;
+        }
+
+        button.previous {
+          order: 2;
+      
+        }
+
+        button.next {
+          order: 3;
+          align-self: flex-end;
         }
       `,
     ];
@@ -85,15 +118,15 @@ export class UrWcCarousel extends LitElement {
     this.__slides = [
       {
         url: '../demo/resources/slide-1.jpeg',
-        alt: 'Cats Crossing Road',
+        alt: 'Sample Alternate Text 1',
       },
       {
         url: '../demo/resources/slide-2.jpeg',
-        alt: 'Cats In Fish Market',
+        alt: 'Sample Alternate Text 2',
       },
       {
         url: '../demo/resources/slide-3.jpeg',
-        alt: 'Cats On Caribbean',
+        alt: 'Sample Alternate Text 3',
       },
     ];
     this.__totalSlides = this.__slides.length;
@@ -213,8 +246,8 @@ export class UrWcCarousel extends LitElement {
             <button class="previous" aria-label="Previous Slide">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                height="24"
-                width="24"
+                height="32"
+                width="32"
                 viewBox="0 0 320 512"
               >
                 <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -227,8 +260,8 @@ export class UrWcCarousel extends LitElement {
               ${this.autoRotation
                 ? html`<svg
                     xmlns="http://www.w3.org/2000/svg"
-                    height="24"
-                    width="24"
+                    height="32"
+                    width="32"
                     viewBox="0 0 320 512"
                   >
                     <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -238,8 +271,8 @@ export class UrWcCarousel extends LitElement {
                   </svg>`
                 : html`<svg
                     xmlns="http://www.w3.org/2000/svg"
-                    height="24"
-                    width="24"
+                    height="32"
+                    width="32"
                     viewBox="0 0 384 512"
                   >
                     <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
@@ -251,8 +284,8 @@ export class UrWcCarousel extends LitElement {
             <button class="next" aria-label="Next Slide">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                height="24"
-                width="24"
+                height="32"
+                width="32"
                 viewBox="0 0 320 512"
               >
                 <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
