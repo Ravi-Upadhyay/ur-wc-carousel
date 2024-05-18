@@ -21,12 +21,12 @@ export class UrWcCarousel extends LitElement {
         /* Host Styling - Can be changed from outside */
         :host {
           display: flex;
+          min-width: 400px;
         }
 
         /* Carousel */
         .carousel {
           background-color: #eee;
-          max-width: 900px;
         }
 
         .carousel .carousel-inner {
@@ -41,7 +41,6 @@ export class UrWcCarousel extends LitElement {
         .carousel .carousel-item {
           display: none;
           height: auto;
-          max-width: 900px;
           position: relative;
           overflow: hidden;
         }
@@ -55,30 +54,29 @@ export class UrWcCarousel extends LitElement {
           display: flex;
           flex-direction: row;
           gap: 0.5em;
+          justify-content: space-between;
           position: absolute;
           top: 1em;
         }
 
+        .controls-left {
+          padding-left: 1em;
+        }
+
+        .controls-right {
+          padding-right: 1em;
+        }
+
         .controls button {
-          border: 1px;
-          background-color: rgba(0,0,0,0.5);
-          fill: rgba(255,255,255,0.8);
+          border: none;
+          background-color: rgba(0, 0, 0, 0.6);
+          fill: rgba(255, 255, 255, 0.9);
           width: 44px;
           height: 44px;
         }
 
-        button.rotation {
-          order: 1;
-        }
-
-        button.previous {
-          order: 2;
-      
-        }
-
-        button.next {
-          order: 3;
-          align-self: flex-end;
+        .controls button :hover {
+          fill: rgba(255, 255, 255, 1);
         }
       `,
     ];
@@ -104,6 +102,12 @@ export class UrWcCarousel extends LitElement {
     this.__addEventListenerPrevious();
     this.__addEventListenerRotation();
     this.__handleSlideChange();
+  }
+
+  updated(changedProperties) {
+    if (changedProperties.has('slides')) {
+      this.__initializeSlides();
+    }
   }
 
   /**
@@ -225,7 +229,6 @@ export class UrWcCarousel extends LitElement {
   }
 
   render() {
-    // TODO: DevelopmentPurposeOnly - Images have been put under "/_site-dev/_merged_assets/carousel".
     return html`
       <div
         class="carousel"
@@ -243,57 +246,63 @@ export class UrWcCarousel extends LitElement {
             )}
           </div>
           <div class="controls">
-            <button class="previous" aria-label="Previous Slide">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="32"
-                width="32"
-                viewBox="0 0 320 512"
-              >
-                <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                <path
-                  d="M267.5 440.6c9.5 7.9 22.8 9.7 34.1 4.4s18.4-16.6 18.4-29V96c0-12.4-7.2-23.7-18.4-29s-24.5-3.6-34.1 4.4l-192 160L64 241V96c0-17.7-14.3-32-32-32S0 78.3 0 96V416c0 17.7 14.3 32 32 32s32-14.3 32-32V271l11.5 9.6 192 160z"
-                />
-              </svg>
-            </button>
-            <button class="rotation pause" aria-label="Toggle Slide Rotation">
-              ${this.autoRotation
-                ? html`<svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="32"
-                    width="32"
-                    viewBox="0 0 320 512"
-                  >
-                    <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                    <path
-                      d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"
-                    />
-                  </svg>`
-                : html`<svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    height="32"
-                    width="32"
-                    viewBox="0 0 384 512"
-                  >
-                    <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                    <path
-                      d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"
-                    />
-                  </svg>`}
-            </button>
-            <button class="next" aria-label="Next Slide">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                height="32"
-                width="32"
-                viewBox="0 0 320 512"
-              >
-                <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
-                <path
-                  d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416V96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4l192 160L256 241V96c0-17.7 14.3-32 32-32s32 14.3 32 32V416c0 17.7-14.3 32-32 32s-32-14.3-32-32V271l-11.5 9.6-192 160z"
-                />
-              </svg>
-            </button>
+            <div class="controls-left">
+              <button class="rotation" aria-label="Toggle Slide Rotation">
+                ${this.autoRotation
+                  ? html`<svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="32"
+                      width="32"
+                      viewBox="0 0 320 512"
+                    >
+                      <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                      <path
+                        d="M48 64C21.5 64 0 85.5 0 112V400c0 26.5 21.5 48 48 48H80c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H48zm192 0c-26.5 0-48 21.5-48 48V400c0 26.5 21.5 48 48 48h32c26.5 0 48-21.5 48-48V112c0-26.5-21.5-48-48-48H240z"
+                      />
+                    </svg>`
+                  : html`<svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      height="32"
+                      width="32"
+                      viewBox="0 0 384 512"
+                    >
+                      <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                      <path
+                        d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"
+                      />
+                    </svg>`}
+              </button>
+            </div>
+
+            <div class="controls-right">
+              <button class="previous" aria-label="Previous Slide">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="32"
+                  width="32"
+                  viewBox="0 0 320 512"
+                >
+                  <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                  <path
+                    d="M267.5 440.6c9.5 7.9 22.8 9.7 34.1 4.4s18.4-16.6 18.4-29V96c0-12.4-7.2-23.7-18.4-29s-24.5-3.6-34.1 4.4l-192 160L64 241V96c0-17.7-14.3-32-32-32S0 78.3 0 96V416c0 17.7 14.3 32 32 32s32-14.3 32-32V271l11.5 9.6 192 160z"
+                  />
+                </svg>
+              </button>
+
+              <button class="next" aria-label="Next Slide">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  height="32"
+                  width="32"
+                  viewBox="0 0 320 512"
+                >
+                  <!--!Font Awesome Free 6.5.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free Copyright 2024 Fonticons, Inc.-->
+                  <path
+                    d="M52.5 440.6c-9.5 7.9-22.8 9.7-34.1 4.4S0 428.4 0 416V96C0 83.6 7.2 72.3 18.4 67s24.5-3.6 34.1 4.4l192 160L256 241V96c0-17.7 14.3-32 32-32s32 14.3 32 32V416c0 17.7-14.3 32-32 32s-32-14.3-32-32V271l-11.5 9.6-192 160z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
